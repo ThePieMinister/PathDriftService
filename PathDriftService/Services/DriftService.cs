@@ -17,19 +17,19 @@ namespace PathDriftService.Services
          {
             var reply = new PathDriftReply
             {
-               Message = "One item here, please"
-               //History[0] = new PathDriftItem
-               //{
-               //   ID = "Path_2",
-               //   Index = 1,
-               //   X = 10.0,
-               //   Y = 11.0,
-               //   Z = 12.0,
-               //   Rx = 20.0,
-               //   Ry = 21.0,
-               //   Rz = 22.0
-               //}
+               Message = "One item here, please",
             };
+            reply.History.Add(new PathDriftItem
+            {
+               ID = "Path_2",
+               Index = 1,
+               X = 10.0f,
+               Y = 11.0f,
+               Z = 12.0f,
+               Rx = 20.0f,
+               Ry = 21.0f,
+               Rz = 22.0f
+            });
 
             _logger.LogInformation($"gRPC Request received");
             return Task.FromResult(reply);
