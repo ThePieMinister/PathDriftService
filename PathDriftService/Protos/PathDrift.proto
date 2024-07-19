@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "PathDriftService";
+
+package PathDrift;
+
+// The Path Drift service definition.
+service PathDrift {
+   // asks for PathDrift items to be sent. The entire set is the expected response.
+   rpc GetPathDrift (PathDriftRequest) returns (stream PathDriftReply);
+}
+
+// The request 
+message PathDriftRequest{
+   string ID = 1;
+   //int32 firstItem = 2;
+   //int32 lastItem = 3;
+}
+
+// Message containing the 3d position and rotation coordinates of a measurement.
+message PathDriftItem {
+   // I do not yet know why we might need the ID name, but I will keep it for now
+   string ID = 1;
+   // All indexes are +ve, so sint32 is not considered. I will see how uint may be required in later coding
+   // Whether we may potentially require uint64 is another question I do not know the answer to.
+   // Assuming 32 bit to save space for the moment.
+   int32 Index = 2;
+   // Floats should be sufficient for these, given the range and variation apparent in the sample data.
+   float X = 3;
+   float Y = 4;
+   float Z = 5;
+   float Rx = 6;
+   float Ry = 7;
+   float Rz = 8;
+}
+
+// The response message containing the data.
+message PathDriftReply{
+   repeated PathDriftItem history = 1;
+   string message = 500;
+}
