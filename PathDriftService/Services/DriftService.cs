@@ -11,32 +11,54 @@ namespace PathDriftService.Services
          _logger = logger;
       }
 
-      public override Task<PathDriftReply> GetPathDrift(PathDriftRequest request, IServerStreamWriter<PathDriftReply> responseStream, ServerCallContext context)
+      public override async Task GetPathDrift(PathDriftRequest request, IServerStreamWriter<PathDriftItem> responseStream, ServerCallContext context)
       {
          try
          {
-            var reply = new PathDriftReply
-            {
-               Message = "One item here, please",
-            };
-            reply.History.Add(new PathDriftItem
-            {
-               ID = "Path_2",
-               Index = 1,
-               X = 10.0f,
-               Y = 11.0f,
-               Z = 12.0f,
-               Rx = 20.0f,
-               Ry = 21.0f,
-               Rz = 22.0f
-            });
-
             _logger.LogInformation($"gRPC Request received");
-            return Task.FromResult(reply);
+            for (int i = 1; (i <= 5 && !context.CancellationToken.IsCancellationRequested); ++i)
+            {
+               var reply = new PathDriftItem
+               {
+                  ID = "Path_2",
+                  Index = i,
+                  X = 10.0f + i,
+                  Y = 11.0f + i,
+                  Z = 12.0f + i,
+                  Rx = 20.0f,
+                  Ry = 21.0f,
+                  Rz = 22.0f
+               };
+
+               await responseStream.WriteAsync(reply);
+               await Task.Delay(TimeSpan.FromSeconds(2), context.CancellationToken);
+            }
+         }
+         catch (Exception ) when (context.CancellationToken.IsCancellationRequested)
+         {
+            _logger.LogInformation("Request was cancelled by the client");
          }
          catch (Exception ex)
          {
             _logger.LogError("Error while handling your Request {Message}", ex.Message);
+            throw;
+         }
+      }
+
+      public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
+      {
+         try
+         {
+            var reply = new HelloReply
+            {
+               Message = $"Hello, {request.Name}"
+            };
+            _logger.LogInformation($"GRPC Request Send and Recived");
+            return Task.FromResult(reply);
+         }
+         catch (Exception ex)
+         {
+            _logger.LogError("Error while handing your request {Message}", ex.Message);
             throw;
          }
       }
