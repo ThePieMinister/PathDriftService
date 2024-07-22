@@ -4,12 +4,12 @@ using Grpc.Core;
 
 var channel = GrpcChannel.ForAddress("https://localhost:7262");
 var client = new PathDrift.PathDriftClient(channel);
-Console.WriteLine("Please Enter a Path ID:");
-string pathId = Console.ReadLine() ?? "Missing Path ID";
+Console.WriteLine("Please enter the name of a PathDriftDate CSV file to read:");
+string filename = Console.ReadLine() ?? "Missing filename";
 
-var response = await client.SayHelloAsync(new HelloRequest { Name = pathId });
-Console.WriteLine(response);
-Console.ReadLine();
+//var response = await client.SayHelloAsync(new HelloRequest { Name = filename });
+//Console.WriteLine(response);
+//Console.ReadLine();
 
 
 using var cts = new CancellationTokenSource();
@@ -24,7 +24,7 @@ Console.CancelKeyPress += (sender, e) =>
    cts.Cancel();
 };
 
-using var call = client.GetPathDrift(new PathDriftRequest { ID = pathId }, null, null, cts.Token);
+using var call = client.GetPathDrift(new PathDriftRequest { Filename = filename }, null, null, cts.Token);
 try
 {
    await foreach (var pathItem in call.ResponseStream.ReadAllAsync())
