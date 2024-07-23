@@ -43,5 +43,23 @@ namespace PathDriftService.Services
          }
       }
 
+      public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
+      {
+         try
+         {
+            var reply = new HelloReply
+            {
+               Message = $"Hello, {request.Name}"
+            };
+            _logger.LogInformation($"GRPC Request Sent and Received");
+            return Task.FromResult(reply);
+         }
+         catch (Exception ex)
+         {
+            _logger.LogError("Error while handing your request {Message}", ex.Message);
+            throw;
+         }
+      }
+
    }
 }

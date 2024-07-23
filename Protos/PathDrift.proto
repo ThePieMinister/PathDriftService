@@ -8,6 +8,7 @@ package PathDrift;
 service PathDrift {
    // asks for PathDrift items to be sent. The entire set is the expected response.
    rpc GetPathDrift (PathDriftRequest) returns (stream PathDriftItem);
+   rpc SayHello (HelloRequest) returns (HelloReply);
 }
 
 // The request message containing the name of the file to load.
@@ -30,4 +31,14 @@ message PathDriftItem {
    float Rx = 6;
    float Ry = 7;
    float Rz = 8;
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+   string name = 1;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+   string message = 1;
 }
