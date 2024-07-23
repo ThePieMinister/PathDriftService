@@ -1,0 +1,96 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@attribute [StreamRendering(true)]
+
+
+<PageTitle>Raw Path Drift Data</PageTitle>
+
+<h1>Raw Path Drift Data from gRPC server</h1>
+
+<hr />
+
+<button class="btn btn-primary" onclick="@LoadPathDriftData">Show Path Drift Data</button>
+
+<hr />
+
+@if (driftData == null)
+{
+   <p><em>Nothing yet...</em></p>
+}
+else
+{
+   <table class="table">
+      <thead>
+         <tr>
+            <th>ID</th>
+            <th>Index</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>Y</th>
+            <th>RX</th>
+            <th>RY</th>
+            <th>RZ</th>
+         </tr>
+      </thead>
+      <tbody>
+         @foreach (var driftItem in driftData)
+         {
+            <tr>
+               <td>@driftItem.ID</td>
+               <td>@driftItem.Index</td>
+               <td>@driftItem.X</td>
+               <td>@driftItem.Y</td>
+               <td>@driftItem.Z</td>
+               <td>@driftItem.Rx</td>
+               <td>@driftItem.Ry</td>
+               <td>@driftItem.Rz</td>
+            </tr>
+         }
+      </tbody>
+   </table>
+}
+
+@code {
+
+   private PathDriftItem[]? driftData;
+
+   async Task LoadPathDriftData()
+   {
+      var channel = GrpcChannel.ForAddress("https://localhost:7262");
+      var client = new PathDrift.PathDriftClient(channel);
+
+      // This should be set to cancel on moving from the page.
+      using var cts = new CancellationTokenSource();
+      Console.CancelKeyPress += (sender, e) =>
+      {
+         // We'll stop the process manually by using the CancellationToken
+         e.Cancel = true;
+
+         // Change the state of the CancellationToken to "Canceled"
+         // - Set the IsCancellationRequested property to true
+         // - Call the registered callbacks
+         cts.Cancel();
+      };
+
+      List<PathDriftItem> items = new();
+      using var call = client.GetPathDrift(new PathDriftRequest { Filename = "..\\TestData\\run1.csv" }, null, null, cts.Token);
+      try
+      {
+         await foreach (var pathItem in call.ResponseStream.ReadAllAsync())
+         {
+            items.Add(pathItem);
+         }
+      }
+      catch (RpcException ex) when (ex.Status.StatusCode == StatusCode.Cancelled)
+      {
+         Console.WriteLine(ex.Status.Detail);
+      }
+      catch (RpcException ex)
+      {
+         Console.WriteLine(ex.Message);
+      }
+      driftData = items.ToArray();
+
+      await channel.ShutdownAsync();
+   }
+}
