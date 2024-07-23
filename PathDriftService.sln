@@ -5,8 +5,6 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathDriftService", "PathDriftService\PathDriftService.csproj", "{83A268D9-0EA3-4916-A9BF-ADAEE54BD428}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathDriftClient", "PathDriftClient\PathDriftClient.csproj", "{44EC7E0F-6C24-43B7-B483-BFA1E36F0566}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathDriftBlazorClient", "PathDriftBlazorClient\PathDriftBlazorClient.csproj", "{9A2D72BF-8EB7-4F65-BD62-B863EC17094D}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{83A268D9-0EA3-4916-A9BF-ADAEE54BD428}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83A268D9-0EA3-4916-A9BF-ADAEE54BD428}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83A268D9-0EA3-4916-A9BF-ADAEE54BD428}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44EC7E0F-6C24-43B7-B483-BFA1E36F0566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44EC7E0F-6C24-43B7-B483-BFA1E36F0566}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44EC7E0F-6C24-43B7-B483-BFA1E36F0566}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44EC7E0F-6C24-43B7-B483-BFA1E36F0566}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A2D72BF-8EB7-4F65-BD62-B863EC17094D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A2D72BF-8EB7-4F65-BD62-B863EC17094D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A2D72BF-8EB7-4F65-BD62-B863EC17094D}.Release|Any CPU.ActiveCfg = Release|Any CPU
